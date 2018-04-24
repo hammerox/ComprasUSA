@@ -9,7 +9,16 @@
 import UIKit
 
 class ProductViewController: UIViewController {
+    
+    
+    @IBOutlet weak var textName: UITextField!
+    @IBOutlet weak var imagePicture: UIImageView!
+    @IBOutlet weak var textState: UITextField!
+    @IBOutlet weak var textPrice: UITextField!
+    @IBOutlet weak var switchCreditCard: UISwitch!
+    var product : String?
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,5 +41,40 @@ class ProductViewController: UIViewController {
     }
     */
     
+    @IBAction func updateProduct(_ sender: UIButton) {
+        
+        if let image = imagePicture.image {
+            if image == UIImage(named: "Gift") {
+                showAlert(message: "Imagem não definida")
+                return
+            }
+        }
+        
+        guard let name = textName.text else {
+            showAlert(message: "Nome não preenchido")
+            return
+        }
+        
+        guard let state = textState.text else {
+            showAlert(message: "Estado não preenchido")
+            return
+        }
+        
+        guard let price = textPrice.text else {
+            showAlert(message: "Preço não preenchido")
+            return
+        }
+        
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: "Formulário incompleto", message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            NSLog("The \"OK\" alert occured.")
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
     
 }
