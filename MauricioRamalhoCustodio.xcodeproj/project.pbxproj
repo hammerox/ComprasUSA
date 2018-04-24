@@ -13,6 +13,8 @@
 		AC17E05B208E98D800893CBC /* MauricioRamalhoCustodio.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AC17E059208E98D800893CBC /* MauricioRamalhoCustodio.xcdatamodeld */; };
 		AC17E05D208E98D800893CBC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC17E05C208E98D800893CBC /* Assets.xcassets */; };
 		AC17E060208E98D800893CBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC17E05E208E98D800893CBC /* LaunchScreen.storyboard */; };
+		AC17E068208EA24B00893CBC /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC17E067208EA24B00893CBC /* ProductTableViewController.swift */; };
+		AC17E06C208EB26000893CBC /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC17E06B208EB26000893CBC /* ProductViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		AC17E05C208E98D800893CBC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		AC17E05F208E98D800893CBC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AC17E061208E98D800893CBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AC17E067208EA24B00893CBC /* ProductTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
+		AC17E06B208EB26000893CBC /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				AC17E052208E98D800893CBC /* AppDelegate.swift */,
 				AC17E054208E98D800893CBC /* ViewController.swift */,
 				AC17E056208E98D800893CBC /* Main.storyboard */,
+				AC17E06B208EB26000893CBC /* ProductViewController.swift */,
+				AC17E067208EA24B00893CBC /* ProductTableViewController.swift */,
 				AC17E05C208E98D800893CBC /* Assets.xcassets */,
 				AC17E05E208E98D800893CBC /* LaunchScreen.storyboard */,
 				AC17E061208E98D800893CBC /* Info.plist */,
@@ -139,8 +145,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC17E06C208EB26000893CBC /* ProductViewController.swift in Sources */,
 				AC17E055208E98D800893CBC /* ViewController.swift in Sources */,
 				AC17E053208E98D800893CBC /* AppDelegate.swift in Sources */,
+				AC17E068208EA24B00893CBC /* ProductTableViewController.swift in Sources */,
 				AC17E05B208E98D800893CBC /* MauricioRamalhoCustodio.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
