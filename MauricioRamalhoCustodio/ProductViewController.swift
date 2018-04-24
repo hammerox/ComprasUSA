@@ -17,11 +17,12 @@ class ProductViewController: UIViewController {
     @IBOutlet weak var textPrice: UITextField!
     @IBOutlet weak var switchCreditCard: UISwitch!
     var product : String?
+    var imagePicker : UIImagePickerController()
 
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        imagePicker.delegate = self
         // Do any additional setup after loading the view.
     }
 
@@ -40,6 +41,9 @@ class ProductViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    @IBAction func selectImage(_ sender: UIButton) {
+        
+    }
     
     @IBAction func updateProduct(_ sender: UIButton) {
         
@@ -50,17 +54,17 @@ class ProductViewController: UIViewController {
             }
         }
         
-        guard let name = textName.text else {
+        if textName.text!.isEmpty {
             showAlert(message: "Nome não preenchido")
             return
         }
         
-        guard let state = textState.text else {
+        if textState.text!.isEmpty {
             showAlert(message: "Estado não preenchido")
             return
         }
         
-        guard let price = textPrice.text else {
+        if textPrice.text!.isEmpty {
             showAlert(message: "Preço não preenchido")
             return
         }
@@ -77,4 +81,9 @@ class ProductViewController: UIViewController {
         self.present(alert, animated: true, completion: nil)
     }
     
+}
+
+
+extension ProductViewController : UIImagePickerControllerDelegate {
+    // IMPLEMENTAR PICKER CONTROLLER
 }
