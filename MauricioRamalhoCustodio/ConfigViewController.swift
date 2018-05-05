@@ -12,7 +12,7 @@ class ConfigViewController: UIViewController {
     
 
     @IBOutlet weak var stateTableView: UITableView!
-    var states : [String] = ["São Paulo", "Rio de Janeiro"]
+    var states : [(String, Decimal)] = [("São Paulo", 7.00), ("Rio de Janeiro", 12.0)]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,8 +43,9 @@ class ConfigViewController: UIViewController {
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let stateName = alert!.textFields![0].text!
             let taxField = alert!.textFields![1].text!
+            let tuple: (String, Decimal) = (stateName, Decimal(string: taxField)!)
             
-            self.states.append(stateName)
+            self.states.append(tuple)
             self.stateTableView.reloadData()
         }))
         
@@ -94,7 +95,8 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
         
         // Configure the cell...
         
-        cell.stateName.text = states[indexPath.row]
+        cell.stateName.text = states[indexPath.row].0
+        cell.taxRate.text = String(describing: states[indexPath.row].1)
         
         return cell
     }
