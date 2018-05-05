@@ -15,6 +15,7 @@
 		AC17E060208E98D800893CBC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AC17E05E208E98D800893CBC /* LaunchScreen.storyboard */; };
 		AC17E068208EA24B00893CBC /* ProductTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC17E067208EA24B00893CBC /* ProductTableViewController.swift */; };
 		AC17E06C208EB26000893CBC /* ProductViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC17E06B208EB26000893CBC /* ProductViewController.swift */; };
+		AC39C22C209E3811001AB5A8 /* ConfigViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC39C22B209E3811001AB5A8 /* ConfigViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		AC17E061208E98D800893CBC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC17E067208EA24B00893CBC /* ProductTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductTableViewController.swift; sourceTree = "<group>"; };
 		AC17E06B208EB26000893CBC /* ProductViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductViewController.swift; sourceTree = "<group>"; };
+		AC39C22B209E3811001AB5A8 /* ConfigViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfigViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +67,7 @@
 				AC17E056208E98D800893CBC /* Main.storyboard */,
 				AC17E06B208EB26000893CBC /* ProductViewController.swift */,
 				AC17E067208EA24B00893CBC /* ProductTableViewController.swift */,
+				AC39C22B209E3811001AB5A8 /* ConfigViewController.swift */,
 				AC17E05C208E98D800893CBC /* Assets.xcassets */,
 				AC17E05E208E98D800893CBC /* LaunchScreen.storyboard */,
 				AC17E061208E98D800893CBC /* Info.plist */,
@@ -147,6 +150,7 @@
 			files = (
 				AC17E06C208EB26000893CBC /* ProductViewController.swift in Sources */,
 				AC17E055208E98D800893CBC /* ViewController.swift in Sources */,
+				AC39C22C209E3811001AB5A8 /* ConfigViewController.swift in Sources */,
 				AC17E053208E98D800893CBC /* AppDelegate.swift in Sources */,
 				AC17E068208EA24B00893CBC /* ProductTableViewController.swift in Sources */,
 				AC17E05B208E98D800893CBC /* MauricioRamalhoCustodio.xcdatamodeld in Sources */,

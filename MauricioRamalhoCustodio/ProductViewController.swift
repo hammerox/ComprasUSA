@@ -121,6 +121,16 @@ class ProductViewController: UIViewController {
     
     func pickUp(_ textField : UITextField){
         
+        if (pickerData.count > 0) {
+            showPickerView(textField)
+        } else {
+            showAlert(message: "Não há estados")
+        }
+        
+        
+    }
+    
+    func showPickerView(_ textField : UITextField) {
         // UIPickerView
         self.pickerView = UIPickerView(frame:CGRect(x: 0, y: 0, width: self.view.frame.size.width, height: 216))
         self.pickerView.delegate = self
@@ -150,6 +160,7 @@ class ProductViewController: UIViewController {
         toolBar.setItems([cancelButton, spaceButton, doneButton], animated: false)
         toolBar.isUserInteractionEnabled = true
         textField.inputAccessoryView = toolBar
+        
     }
     
     @objc func doneClick() {
