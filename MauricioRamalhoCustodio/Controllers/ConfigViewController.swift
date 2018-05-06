@@ -16,12 +16,6 @@ class ConfigViewController: UIViewController {
     @IBOutlet weak var dolarText: UITextField!
     @IBOutlet weak var iofText: UITextField!
     var states : NSFetchedResultsController<State>!
-    lazy var numberFormatter : NumberFormatter = {
-        let nf = NumberFormatter()
-        nf.maximumFractionDigits = 2
-        nf.minimumFractionDigits = 2
-        return nf
-    }()
     
 
     override func viewDidLoad() {
@@ -34,10 +28,7 @@ class ConfigViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let request : NSFetchRequest<State> = State.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "taxRate", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-        states = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        states = loadStates()
         states.delegate = self
         do {
             try states.performFetch()

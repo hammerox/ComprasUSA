@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ProductViewController: UIViewController {
     
@@ -18,10 +19,11 @@ class ProductViewController: UIViewController {
     @IBOutlet weak var switchCreditCard: UISwitch!
     @IBOutlet weak var saveButton: UIButton!
     var product : Product?
+    var states : NSFetchedResultsController<State>!
+    
     var smallImage: UIImage!
     var pickerView : UIPickerView!
-    var pickerData = ["Exemplo", "Mais um"]
-    var pickerSelectedRow = 0
+    var pickerSelectedRow: Int? = nil
 
     
     override func viewDidLoad() {
@@ -30,6 +32,7 @@ class ProductViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        fetchStates()
         if let product = product {
             textName.text = product.name
             imagePicture.image = product.image as! UIImage
@@ -43,6 +46,16 @@ class ProductViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func fetchStates() {
+        states = loadStates()
+        states.delegate = self
+        do {
+            try states.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
     
 
@@ -77,34 +90,63 @@ class ProductViewController: UIViewController {
     }
     
     @IBAction func updateProduct(_ sender: UIButton) {
-        
+        if inputsAreValid() {
+            if product == nil {
+                product = Product(context: context)
+            }
+            
+            product!.name = textName.text
+            product!.image = imagePicture.image
+            let priceValue = Decimal(string: textPrice.text!)!
+            product!.price = priceValue as NSDecimalNumber
+            product!.state = states.object(at: IndexPath(row: pickerSelectedRow!, section: 0))
+            product!.creditCard = switchCreditCard.isOn
+            saveContext()
+            navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    
+    @IBAction func setState(_ sender: UITextField) {
+        pickUp(textState)
+    }
+    
+    
+    func inputsAreValid() -> Bool {
         if let image = imagePicture.image {
             if image == UIImage(named: "Gift") {
                 showAlert(message: "Imagem não definida")
-                return
+                return false
             }
         }
         
         if textName.text!.isEmpty {
             showAlert(message: "Nome não preenchido")
-            return
+            return false
+        }
+        
+        findCurrentStateIndex()
+        guard let selectedState = pickerSelectedRow else {
+            showAlert(message: "O estado escolhido nao existe mais")
+            return false
         }
         
         if textState.text!.isEmpty {
             showAlert(message: "Estado não preenchido")
-            return
+            return false
         }
         
         if textPrice.text!.isEmpty {
             showAlert(message: "Preço não preenchido")
-            return
+            return false
         }
         
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @IBAction func setState(_ sender: UITextField) {
-        pickUp(textState)
+        guard let priceValue = Decimal(string: textPrice.text!) else {
+            self.showAlert(message: "Preco invalido")
+            return false
+        }
+        
+        return true
     }
     
     private func showAlert(message: String) {
@@ -132,8 +174,12 @@ class ProductViewController: UIViewController {
     
     
     func pickUp(_ textField : UITextField){
+        guard let data = states.fetchedObjects else {
+            showAlert(message: "Não há estados")
+            return
+        }
         
-        if (pickerData.count > 0) {
+        if (data.count > 0) {
             showPickerView(textField)
         } else {
             showAlert(message: "Não há estados")
@@ -149,14 +195,8 @@ class ProductViewController: UIViewController {
         self.pickerView.dataSource = self
         self.pickerView.backgroundColor = UIColor.white
         textField.inputView = self.pickerView
-        let currentIndex = pickerData.index(of: textState.text!)?.hashValue
-        if currentIndex != nil {
-            pickerSelectedRow = currentIndex!
-            self.pickerView.selectRow(pickerSelectedRow, inComponent: 0, animated: false)
-        } else {
-            pickerSelectedRow = 0
-            self.pickerView.selectRow(0, inComponent: 0, animated: false)
-        }
+        
+        findCurrentStateIndex()
         
         // ToolBar
         let toolBar = UIToolbar()
@@ -175,8 +215,23 @@ class ProductViewController: UIViewController {
         
     }
     
+    func findCurrentStateIndex() {
+        let currentIndex = states.fetchedObjects!.index { (state) -> Bool in
+            state.name == textState.text!
+            }?.hashValue
+        
+        if currentIndex != nil {
+            pickerSelectedRow = currentIndex!
+            self.pickerView?.selectRow(pickerSelectedRow!, inComponent: 0, animated: false)
+        } else {
+            pickerSelectedRow = nil
+            self.pickerView?.selectRow(0, inComponent: 0, animated: false)
+        }
+    }
+    
     @objc func doneClick() {
-        self.textState.text = pickerData[pickerSelectedRow]
+        let selectedState = states.object(at: IndexPath(row: pickerSelectedRow!, section: 0))
+        textState.text = selectedState.name
         textState.resignFirstResponder()
     }
     
@@ -211,15 +266,25 @@ extension ProductViewController : UIPickerViewDelegate, UIPickerViewDataSource, 
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return pickerData.count
+        guard let count = states.fetchedObjects?.count else {
+            return 0
+        }
+        return count
     }
     
     func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        return pickerData[row]
+        let selectedState = states.object(at: IndexPath(row: row, section: 0))
+        return selectedState.name
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         pickerSelectedRow = row
     }
     
+}
+
+extension ProductViewController : NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        pickerView?.reloadAllComponents()
+    }
 }

@@ -23,10 +23,7 @@ class ProductTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        let request : NSFetchRequest<Product> = Product.fetchRequest()
-        let sortDescriptor = NSSortDescriptor(key: "price", ascending: false)
-        request.sortDescriptors = [sortDescriptor]
-        products = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        products = loadProducts()
         products.delegate = self
         do {
             try products.performFetch()
@@ -85,7 +82,7 @@ class ProductTableViewController: UITableViewController {
         // Configure the cell...
         let selectedProduct = products.object(at: indexPath)
         cell.name.text = selectedProduct.name
-        cell.price.text = String(describing: selectedProduct.price!)
+        cell.price.text = "U$\(numberFormatter.string(from: selectedProduct.price!)!)"
         cell.imagePicture.image = selectedProduct.image as! UIImage
 
         return cell
