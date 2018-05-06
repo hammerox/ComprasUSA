@@ -12,12 +12,18 @@ class ConfigViewController: UIViewController {
     
 
     @IBOutlet weak var stateTableView: UITableView!
+    @IBOutlet weak var dolarText: UITextField!
+    @IBOutlet weak var iofText: UITextField!
     var states : [(String, Decimal)] = [("São Paulo", 7.00), ("Rio de Janeiro", 12.0)]
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         stateTableView.delegate = self
         stateTableView.dataSource = self
+        registerSettingsBundle()
+        NotificationCenter.default.addObserver(self, selector: #selector(ConfigViewController.defaultsChanged), name: UserDefaults.didChangeNotification, object: nil)
+        defaultsChanged()
         // Do any additional setup after loading the view.
     }
 
@@ -25,7 +31,31 @@ class ConfigViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }    // MARK: - Table view data source
-
+    
+    func registerSettingsBundle() {
+        let appDefaults = ["dolar_value": "3.53", "iof_value": "3"]
+        UserDefaults.standard.register(defaults: appDefaults)
+        //UserDefaults.standard.synchronize()
+    }
+    
+    @objc func defaultsChanged() {
+        if let dolarValue = UserDefaults.standard.string(forKey: "dolar_value") {
+            dolarText.text = dolarValue
+        }
+        
+        if let iofValue = UserDefaults.standard.string(forKey: "iof_value") {
+            iofText.text = iofValue
+        }
+    }
+    
+    @IBAction func dolarValueChanged(_ sender: Any) {
+        UserDefaults.standard.set(dolarText.text, forKey: "dolar_value")
+    }
+    
+    @IBAction func iofValueChanged(_ sender: UITextField) {
+        UserDefaults.standard.set(iofText.text, forKey: "iof_value")
+    }
+    
     @IBAction func addState(_ sender: UIButton) {
         //1. Create the alert controller.
         let alert = UIAlertController(title: "Adicionar Estado", message: "", preferredStyle: .alert)
