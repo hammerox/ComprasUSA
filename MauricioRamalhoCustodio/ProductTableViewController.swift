@@ -7,26 +7,28 @@
 //
 
 import UIKit
+import CoreData
 
 class ProductTableViewController: UITableViewController {
     
     //let products : [String] = ["Um", "Dois"]
-    lazy var products : [Product] = {
-        var array: [Product] = []
-        let prod1 = Product(context: context)
-        prod1.name = "Computador"
-        prod1.price = 30.00 as NSDecimalNumber
-        prod1.image = UIImage(named: "Example")
-        array.append(prod1)
-        
-        let prod2 = Product(context: context)
-        prod2.name = "Azeitonas"
-        prod2.price = 40.00 as NSDecimalNumber
-        prod2.image = UIImage(named: "Example")
-        array.append(prod2)
-        return array
-        
-    }()
+    var products: NSFetchedResultsController<Product>!
+//    lazy var products : [Product] = {
+//        var array: [Product] = []
+//        let prod1 = Product(context: context)
+//        prod1.name = "Computador"
+//        prod1.price = 30.00 as NSDecimalNumber
+//        prod1.image = UIImage(named: "Example")
+//        array.append(prod1)
+//
+//        let prod2 = Product(context: context)
+//        prod2.name = "Azeitonas"
+//        prod2.price = 40.00 as NSDecimalNumber
+//        prod2.image = UIImage(named: "Example")
+//        array.append(prod2)
+//        return array
+//
+//    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,6 +37,19 @@ class ProductTableViewController: UITableViewController {
 
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let request : NSFetchRequest<Product> = Product.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "price", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        products = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        products.delegate = self
+        do {
+            try products.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -46,11 +61,20 @@ class ProductTableViewController: UITableViewController {
 
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        if products.count > 0 {
+        guard let data = products.fetchedObjects else {
+            let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+            noDataLabel.text = "Sua lista está vazia!"
+            noDataLabel.textColor = UIColor.black
+            noDataLabel.textAlignment = .center
+            tableView.backgroundView = noDataLabel
+            tableView.separatorStyle = .none
+            return 0
+        }
+        
+        if data.count > 0 {
             self.tableView.separatorStyle = .singleLine
             self.tableView.backgroundView = nil
             return 1
-            
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
             noDataLabel.text = "Sua lista está vazia!"
@@ -64,7 +88,11 @@ class ProductTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return products.count
+        if let data = products.fetchedObjects {
+            return data.count
+        } else {
+            return 0
+        }
     }
 
     
@@ -72,7 +100,7 @@ class ProductTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! ProductTableViewCell
 
         // Configure the cell...
-        let selectedProduct = products[indexPath.row]
+        let selectedProduct = products.object(at: indexPath)
         cell.name.text = selectedProduct.name
         cell.price.text = String(describing: selectedProduct.price!)
         cell.imagePicture.image = selectedProduct.image as! UIImage
@@ -99,8 +127,9 @@ class ProductTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            products.remove(at: indexPath.row)
-            tableView.reloadData()
+            let selectedProduct = products.object(at: indexPath)
+            context.delete(selectedProduct)
+            saveContext()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
@@ -137,7 +166,7 @@ class ProductTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let destination = storyboard.instantiateViewController(withIdentifier: "ProductView") as! ProductViewController
-        let selectedProduct = products[indexPath.row]
+        let selectedProduct = products.object(at: indexPath)
         destination.product = selectedProduct
         navigationController?.pushViewController(destination, animated: true)
     }
@@ -145,6 +174,11 @@ class ProductTableViewController: UITableViewController {
 
 }
 
+extension ProductTableViewController : NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        tableView.reloadData()
+    }
+}
 
 class ProductTableViewCell : UITableViewCell {
     
