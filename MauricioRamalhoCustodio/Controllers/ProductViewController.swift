@@ -230,6 +230,7 @@ class ProductViewController: UIViewController {
     }
     
     @objc func doneClick() {
+        if pickerSelectedRow == nil { pickerSelectedRow = 0 }
         let selectedState = states.object(at: IndexPath(row: pickerSelectedRow!, section: 0))
         textState.text = selectedState.name
         textState.resignFirstResponder()

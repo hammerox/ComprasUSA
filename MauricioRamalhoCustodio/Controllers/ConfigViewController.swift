@@ -232,10 +232,29 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
         
         if editingStyle == .delete {
             let selectedState = states.object(at: indexPath)
+            deleteRelatedProducts(selectedState)
             context.delete(selectedState)
+            saveContext()
             tableView.reloadData()
         }
         
+    }
+    
+    func deleteRelatedProducts(_ selectedState: State) {
+        let allProducts = loadProducts()
+        do {
+            try allProducts.performFetch()
+            let productsToDelete = allProducts.fetchedObjects?.filter({ (p) -> Bool in
+                p.state == selectedState
+            })
+            if productsToDelete != nil {
+                for product in productsToDelete! {
+                    context.delete(product)
+                }
+            }
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 }
 
