@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class ConfigViewController: UIViewController {
     
@@ -14,19 +15,12 @@ class ConfigViewController: UIViewController {
     @IBOutlet weak var stateTableView: UITableView!
     @IBOutlet weak var dolarText: UITextField!
     @IBOutlet weak var iofText: UITextField!
-    
-    lazy var states : [State] = {
-        var array: [State] = []
-        let state1 = State(context: context)
-        state1.name = "Sao Paulo"
-        state1.taxRate = 7.01
-        array.append(state1)
-        
-        let state2 = State(context: context)
-        state2.name = "Rio de Janeiro"
-        state2.taxRate = 12.01
-        array.append(state2)
-        return array
+    var states : NSFetchedResultsController<State>!
+    lazy var numberFormatter : NumberFormatter = {
+        let nf = NumberFormatter()
+        nf.maximumFractionDigits = 2
+        nf.minimumFractionDigits = 2
+        return nf
     }()
     
 
@@ -37,6 +31,19 @@ class ConfigViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(ConfigViewController.defaultsChanged), name: UserDefaults.didChangeNotification, object: nil)
         defaultsChanged()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        let request : NSFetchRequest<State> = State.fetchRequest()
+        let sortDescriptor = NSSortDescriptor(key: "taxRate", ascending: false)
+        request.sortDescriptors = [sortDescriptor]
+        states = NSFetchedResultsController(fetchRequest: request, managedObjectContext: context, sectionNameKeyPath: nil, cacheName: nil)
+        states.delegate = self
+        do {
+            try states.performFetch()
+        } catch {
+            print(error.localizedDescription)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -78,19 +85,35 @@ class ConfigViewController: UIViewController {
         
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] (_) in
             let stateName = alert!.textFields![0].text!
-            let taxField = alert!.textFields![1].text!
-            let tuple: (String, Decimal) = (stateName, Decimal(string: taxField)!)
+            let taxValue = alert!.textFields![1].text!
+            
+            if stateName.isEmpty {
+                self.showAlert(message: "Preencha o nome do estado")
+                return
+            }
+            
+            guard let taxRate = Decimal(string: taxValue) else {
+                self.showAlert(message: "Valor do imposto invalido")
+                return
+            }
             
             let newState = State(context: self.context)
             newState.name = stateName
-            newState.taxRate = Decimal(string: taxField)! as? NSDecimalNumber
-            self.states.append(newState)
-            self.stateTableView.reloadData()
+            newState.taxRate = taxRate as NSDecimalNumber
+            self.saveContext()
         }))
         
         alert.addAction(UIAlertAction(title: "Cancelar", style: .cancel, handler: nil))
         
         // 4. Present the alert.
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func showAlert(message: String) {
+        let alert = UIAlertController(title: message, message: "", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: NSLocalizedString("OK", comment: "Default action"), style: .default, handler: { _ in
+            NSLog("The \"OK\" alert occured.")
+        }))
         self.present(alert, animated: true, completion: nil)
     }
 }
@@ -107,11 +130,20 @@ class StateTableViewCell : UITableViewCell {
 extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
-        if states.count > 0 {
-            tableView.separatorStyle = .singleLine
-            tableView.backgroundView = nil
+        guard let data = states.fetchedObjects else {
+            let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
+            noDataLabel.text = "Sua lista está vazia!"
+            noDataLabel.textColor = UIColor.black
+            noDataLabel.textAlignment = .center
+            tableView.backgroundView = noDataLabel
+            tableView.separatorStyle = .none
+            return 0
+        }
+        
+        if data.count > 0 {
+            self.stateTableView.separatorStyle = .singleLine
+            self.stateTableView.backgroundView = nil
             return 1
-            
         } else {
             let noDataLabel: UILabel = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.bounds.size.width, height: tableView.bounds.size.height))
             noDataLabel.text = "Sua lista está vazia!"
@@ -125,7 +157,11 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return states.count
+        if let data = states.fetchedObjects {
+            return data.count
+        } else {
+            return 0
+        }
     }
     
     
@@ -133,9 +169,10 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "StateCell", for: indexPath) as! StateTableViewCell
         
         // Configure the cell...
+        let selectedState = states.object(at: indexPath)
         
-        cell.stateName.text = states[indexPath.row].name!
-        cell.taxRate.text = String(describing: states[indexPath.row].taxRate!)
+        cell.stateName.text = selectedState.name!
+        cell.taxRate.text = numberFormatter.string(from: selectedState.taxRate!)
         
         return cell
     }
@@ -203,9 +240,16 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
                    forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
-            states.remove(at: indexPath.row)
+            let selectedState = states.object(at: indexPath)
+            context.delete(selectedState)
             tableView.reloadData()
         }
         
+    }
+}
+
+extension ConfigViewController : NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        stateTableView.reloadData()
     }
 }

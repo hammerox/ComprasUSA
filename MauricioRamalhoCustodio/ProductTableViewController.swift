@@ -11,24 +11,7 @@ import CoreData
 
 class ProductTableViewController: UITableViewController {
     
-    //let products : [String] = ["Um", "Dois"]
     var products: NSFetchedResultsController<Product>!
-//    lazy var products : [Product] = {
-//        var array: [Product] = []
-//        let prod1 = Product(context: context)
-//        prod1.name = "Computador"
-//        prod1.price = 30.00 as NSDecimalNumber
-//        prod1.image = UIImage(named: "Example")
-//        array.append(prod1)
-//
-//        let prod2 = Product(context: context)
-//        prod2.name = "Azeitonas"
-//        prod2.price = 40.00 as NSDecimalNumber
-//        prod2.image = UIImage(named: "Example")
-//        array.append(prod2)
-//        return array
-//
-//    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()

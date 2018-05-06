@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ResultViewController: UIViewController {
+class TotalViewController: UIViewController {
 
     @IBOutlet weak var dolarValue: UILabel!
     @IBOutlet weak var realValue: UILabel!
