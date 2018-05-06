@@ -14,14 +14,26 @@ class ConfigViewController: UIViewController {
     @IBOutlet weak var stateTableView: UITableView!
     @IBOutlet weak var dolarText: UITextField!
     @IBOutlet weak var iofText: UITextField!
-    var states : [(String, Decimal)] = [("São Paulo", 7.00), ("Rio de Janeiro", 12.0)]
+    
+    lazy var states : [State] = {
+        var array: [State] = []
+        let state1 = State(context: context)
+        state1.name = "Sao Paulo"
+        state1.taxRate = 7.01
+        array.append(state1)
+        
+        let state2 = State(context: context)
+        state2.name = "Rio de Janeiro"
+        state2.taxRate = 12.01
+        array.append(state2)
+        return array
+    }()
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
         stateTableView.delegate = self
         stateTableView.dataSource = self
-        registerSettingsBundle()
         NotificationCenter.default.addObserver(self, selector: #selector(ConfigViewController.defaultsChanged), name: UserDefaults.didChangeNotification, object: nil)
         defaultsChanged()
         // Do any additional setup after loading the view.
@@ -31,12 +43,6 @@ class ConfigViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }    // MARK: - Table view data source
-    
-    func registerSettingsBundle() {
-        let appDefaults = ["dolar_value": "3.53", "iof_value": "3"]
-        UserDefaults.standard.register(defaults: appDefaults)
-        //UserDefaults.standard.synchronize()
-    }
     
     @objc func defaultsChanged() {
         if let dolarValue = UserDefaults.standard.string(forKey: "dolar_value") {
@@ -75,7 +81,10 @@ class ConfigViewController: UIViewController {
             let taxField = alert!.textFields![1].text!
             let tuple: (String, Decimal) = (stateName, Decimal(string: taxField)!)
             
-            self.states.append(tuple)
+            let newState = State(context: self.context)
+            newState.name = stateName
+            newState.taxRate = Decimal(string: taxField)! as? NSDecimalNumber
+            self.states.append(newState)
             self.stateTableView.reloadData()
         }))
         
@@ -125,8 +134,8 @@ extension ConfigViewController: UITableViewDataSource, UITableViewDelegate {
         
         // Configure the cell...
         
-        cell.stateName.text = states[indexPath.row].0
-        cell.taxRate.text = String(describing: states[indexPath.row].1)
+        cell.stateName.text = states[indexPath.row].name!
+        cell.taxRate.text = String(describing: states[indexPath.row].taxRate!)
         
         return cell
     }

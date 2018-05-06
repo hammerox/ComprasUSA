@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8BB43242209E9C6D00DFEC8B /* UIViewController+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB43241209E9C6D00DFEC8B /* UIViewController+CoreData.swift */; };
 		8BF6E6A7209E7E4900FD7343 /* ResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF6E6A6209E7E4900FD7343 /* ResultViewController.swift */; };
 		8BF6E6A9209E7FF200FD7343 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 8BF6E6A8209E7FF200FD7343 /* Settings.bundle */; };
 		AC17E053208E98D800893CBC /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC17E052208E98D800893CBC /* AppDelegate.swift */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		8BB43241209E9C6D00DFEC8B /* UIViewController+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+CoreData.swift"; sourceTree = "<group>"; };
 		8BF6E6A6209E7E4900FD7343 /* ResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultViewController.swift; sourceTree = "<group>"; };
 		8BF6E6A8209E7FF200FD7343 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		AC17E04F208E98D800893CBC /* MauricioRamalhoCustodio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MauricioRamalhoCustodio.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -67,6 +69,7 @@
 			isa = PBXGroup;
 			children = (
 				AC17E052208E98D800893CBC /* AppDelegate.swift */,
+				8BB43241209E9C6D00DFEC8B /* UIViewController+CoreData.swift */,
 				AC17E054208E98D800893CBC /* ViewController.swift */,
 				AC17E056208E98D800893CBC /* Main.storyboard */,
 				8BF6E6A6209E7E4900FD7343 /* ResultViewController.swift */,
@@ -160,6 +163,7 @@
 				8BF6E6A7209E7E4900FD7343 /* ResultViewController.swift in Sources */,
 				AC39C22C209E3811001AB5A8 /* ConfigViewController.swift in Sources */,
 				AC17E053208E98D800893CBC /* AppDelegate.swift in Sources */,
+				8BB43242209E9C6D00DFEC8B /* UIViewController+CoreData.swift in Sources */,
 				AC17E068208EA24B00893CBC /* ProductTableViewController.swift in Sources */,
 				AC17E05B208E98D800893CBC /* MauricioRamalhoCustodio.xcdatamodeld in Sources */,
 			);

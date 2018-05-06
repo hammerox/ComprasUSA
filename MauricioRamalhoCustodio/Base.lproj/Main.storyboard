@@ -212,6 +212,7 @@
                     </view>
                     <connections>
                         <outlet property="imagePicture" destination="7f3-eE-q1s" id="4bq-Qc-GHV"/>
+                        <outlet property="saveButton" destination="qiE-IY-z96" id="vRR-6Y-x9r"/>
                         <outlet property="switchCreditCard" destination="pWU-sN-Nkj" id="Oti-yM-Xhw"/>
                         <outlet property="textName" destination="kif-qi-Eeu" id="FOP-YJ-SW8"/>
                         <outlet property="textPrice" destination="V7A-oL-3jL" id="9wH-aR-Ztu"/>
@@ -250,7 +251,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cotação do dólar (R$):" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="G6Y-7u-hgD">
-                                <rect key="frame" x="16" y="36" width="230" height="30"/>
+                                <rect key="frame" x="16" y="80" width="230" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="m60-cI-92C"/>
                                 </constraints>
@@ -259,7 +260,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0.00" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7Ug-RR-3SE">
-                                <rect key="frame" x="262" y="36" width="97" height="30"/>
+                                <rect key="frame" x="262" y="80" width="97" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="KtR-Cn-Kbj"/>
                                     <constraint firstAttribute="width" constant="97" id="eYe-QU-jSw"/>
@@ -272,7 +273,7 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IOF (%):" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xCG-aN-vI8">
-                                <rect key="frame" x="16" y="82" width="230" height="30"/>
+                                <rect key="frame" x="16" y="126" width="230" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="ivt-q3-ic9"/>
                                 </constraints>
@@ -281,7 +282,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="0.00" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="AMZ-TO-olF">
-                                <rect key="frame" x="262" y="82" width="97" height="30"/>
+                                <rect key="frame" x="262" y="126" width="97" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="BqE-so-lbs"/>
                                     <constraint firstAttribute="width" constant="97" id="CXd-ue-R8Q"/>
@@ -294,7 +295,7 @@
                                 </connections>
                             </textField>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Imposto por estado" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wvy-a7-DrV">
-                                <rect key="frame" x="16" y="144" width="343" height="30"/>
+                                <rect key="frame" x="16" y="188" width="343" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="eNR-gR-PO9"/>
                                 </constraints>
@@ -303,7 +304,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="Aa6-qD-WHm">
-                                <rect key="frame" x="0.0" y="190" width="375" height="388"/>
+                                <rect key="frame" x="0.0" y="234" width="375" height="344"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="StateCell" id="a9G-Zy-N4p" customClass="StateTableViewCell" customModule="MauricioRamalhoCustodio" customModuleProvider="target">
@@ -510,7 +511,7 @@
         <image name="Suitcase" width="16" height="16"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="egF-ch-8zq"/>
+        <segue reference="qhR-oQ-u4L"/>
         <segue reference="jM0-qg-L21"/>
     </inferredMetricsTieBreakers>
 </document>

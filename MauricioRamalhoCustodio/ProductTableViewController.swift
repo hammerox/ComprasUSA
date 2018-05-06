@@ -10,7 +10,23 @@ import UIKit
 
 class ProductTableViewController: UITableViewController {
     
-    let products : [String] = ["Um", "Dois"]
+    //let products : [String] = ["Um", "Dois"]
+    lazy var products : [Product] = {
+        var array: [Product] = []
+        let prod1 = Product(context: context)
+        prod1.name = "Computador"
+        prod1.price = 30.00 as NSDecimalNumber
+        prod1.image = UIImage(named: "Example")
+        array.append(prod1)
+        
+        let prod2 = Product(context: context)
+        prod2.name = "Azeitonas"
+        prod2.price = 40.00 as NSDecimalNumber
+        prod2.image = UIImage(named: "Example")
+        array.append(prod2)
+        return array
+        
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -56,8 +72,10 @@ class ProductTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ProductCell", for: indexPath) as! ProductTableViewCell
 
         // Configure the cell...
-        
-        cell.name.text = products[indexPath.row]
+        let selectedProduct = products[indexPath.row]
+        cell.name.text = selectedProduct.name
+        cell.price.text = String(describing: selectedProduct.price!)
+        cell.imagePicture.image = selectedProduct.image as! UIImage
 
         return cell
     }
@@ -76,17 +94,18 @@ class ProductTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // Override to support editing the table view.
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
+            products.remove(at: indexPath.row)
+            tableView.reloadData()
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }    
     }
-    */
+ 
 
     /*
     // Override to support rearranging the table view.
@@ -118,6 +137,8 @@ class ProductTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath as IndexPath, animated: true)
         let storyboard = UIStoryboard(name: "Main", bundle: Bundle.main)
         let destination = storyboard.instantiateViewController(withIdentifier: "ProductView") as! ProductViewController
+        let selectedProduct = products[indexPath.row]
+        destination.product = selectedProduct
         navigationController?.pushViewController(destination, animated: true)
     }
  

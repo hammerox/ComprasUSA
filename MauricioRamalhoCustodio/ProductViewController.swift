@@ -16,7 +16,8 @@ class ProductViewController: UIViewController {
     @IBOutlet weak var textState: UITextField!
     @IBOutlet weak var textPrice: UITextField!
     @IBOutlet weak var switchCreditCard: UISwitch!
-    var product : String?
+    @IBOutlet weak var saveButton: UIButton!
+    var product : Product?
     var smallImage: UIImage!
     var pickerView : UIPickerView!
     var pickerData = ["Exemplo", "Mais um"]
@@ -26,6 +27,17 @@ class ProductViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if let product = product {
+            textName.text = product.name
+            imagePicture.image = product.image as! UIImage
+            textState.text = product.state?.name
+            textPrice.text = String(describing: product.price!)
+            switchCreditCard.setOn(product.creditCard, animated: false)
+            saveButton.setTitle("Atualizar", for: .normal)
+        }
     }
 
     override func didReceiveMemoryWarning() {
